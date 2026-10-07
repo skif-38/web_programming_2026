@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Задания 2.1 – 2.6</title>
+</head>
+<body>
+<pre id="out"></pre>
+
+<script>
+let out = document.getElementById('out');
+
+/* 2.1. Используя методы строк at, split и toUpperCase, создайте функцию,
+   которая преобразует строку вида "background-color" (kebab-case)
+   в "backgroundColor" (snake-case), т.е. удаляет знак "-" и
+   преобразует последующую букву в заглавную. */
+
+function kebabToCamel(str) {
+  let parts = str.split('-');
+  let result = parts[0];
+  for (let i = 1; i < parts.length; i++) {
+    result = result + parts[i].at(0).toUpperCase() + parts[i].slice(1);
+  }
+  return result;
+}
+
+out.textContent += '2.1\n';
+out.textContent += kebabToCamel('background-color') + '\n';
+out.textContent += kebabToCamel('font-size-adjust') + '\n\n';
+
+
+/* 2.2. Задан массив [9,8,7,6,5,4,3,2,1]. Создайте две копии данного массива
+   разными способами и поменяйте в них порядок на обратный так же двумя
+   способами. Выведите все три массива. */
+
+let arr = [9, 8, 7, 6, 5, 4, 3, 2, 1];
+
+let copy1 = arr.slice();
+copy1.reverse();
+
+let copy2 = [...arr];
+let reversed2 = [];
+for (let i = copy2.length - 1; i >= 0; i--) {
+  reversed2.push(copy2[i]);
+}
+
+out.textContent += '2.2\n';
+out.textContent += 'arr:       ' + arr.join(', ') + '\n';
+out.textContent += 'copy1:     ' + copy1.join(', ') + '\n';
+out.textContent += 'copy2 rev: ' + reversed2.join(', ') + '\n\n';
+
+
+/* 2.3. Используя ассоциативный массив, создайте функцию для перевода
+   заданной строки на необходимый язык. Переводимые слова и фразы
+   ограничены заданным набором (для примера 4 слова). */
+
+let dict = {
+  en: {
+    'ученик':        'student',
+    'иркутского':    'of Irkutsk',
+    'государственного': 'state',
+    'университета':  'university'
+  }
+};
+
+function translate(str, lang) {
+  let words = str.split(' ');
+  let result = [];
+  for (let i = 0; i < words.length; i++) {
+    let w = words[i];
+    if (dict[lang][w]) {
+      result.push(dict[lang][w]);
+    } else {
+      result.push(w);
+    }
+  }
+  return result.join(' ');
+}
+
+out.textContent += '2.3\n';
+out.textContent += translate('ученик иркутского государственного университета', 'en') + '\n\n';
+
+
+/* 2.4. Создайте объект с днями недели. Ключами в нем должны служить номера
+   дней от начала недели (понедельник - первый и т.д.). Добавьте метод,
+   который выводит текущий день недели. */
+
+let week = {
+  1: 'Понедельник',
+  2: 'Вторник',
+  3: 'Среда',
+  4: 'Четверг',
+  5: 'Пятница',
+  6: 'Суббота',
+  7: 'Воскресенье',
+  today: function () {
+    let d = new Date().getDay();   
+    if (d === 0) d = 7;
+    return this[d];
+  }
+};
+
+out.textContent += '2.4\n';
+out.textContent += 'Сегодня: ' + week.today() + '\n\n';
+
+
+/* 2.5. Создайте объект "персонал", содержащий должности и имена. Скопируйте
+   его в объект "персонал 2" и поменяйте в нем имена. Выведите оба объекта,
+   предварительно преобразовав их в строку и используя знаки переноса строки. */
+
+let personal = {
+  'уборщик':      'Вася Пупкин',
+  'босс':         'Иван Иванов',
+  'программист':  'Сидор Сидоров'
+};
+
+let personal2 = Object.assign({}, personal);
+personal2['уборщик']     = 'Петя Васечкин';
+personal2['босс']        = 'Олег Кузнецов';
+personal2['программист'] = 'Анна Смирнова';
+
+out.textContent += '2.5\n';
+out.textContent += 'персонал:\n'   + JSON.stringify(personal) + '\n';
+out.textContent += 'персонал 2:\n' + JSON.stringify(personal2) + '\n\n';
+
+
+/* 2.6. Создайте объект "предметы", со свойством, в котором через запятую
+   перечислены предметы, преподаваемые в университете/школе (перечислите 2-6).
+   Напишите к нему метод, который будет добавлять предмет, если его еще там нет.
+   Используйте для этого преобразование в массив и свойства массивов
+   split, join, push. Создайте метод для удаления предмета, если он уже там есть,
+   с помощью свойства splice. */
+
+let subjects = {
+  list: 'математика,физика,информатика',
+
+  add: function (name) {
+    let arr = this.list.split(',');
+    if (arr.indexOf(name) === -1) {
+      arr.push(name);
+      this.list = arr.join(',');
+      return 'добавлено: ' + name;
+    }
+    return 'уже есть: ' + name;
+  },
+
+  remove: function (name) {
+    let arr = this.list.split(',');
+    let idx = arr.indexOf(name);
+    if (idx !== -1) {
+      arr.splice(idx, 1);
+      this.list = arr.join(',');
+      return 'удалено: ' + name;
+    }
+    return 'нет такого: ' + name;
+  }
+};
+
+out.textContent += '2.6\n';
+out.textContent += subjects.list + '\n';
+out.textContent += subjects.add('химия') + '\n';
+out.textContent += subjects.add('физика') + '\n';
+out.textContent += subjects.remove('физика') + '\n';
+out.textContent += subjects.remove('биология') + '\n';
+out.textContent += subjects.list + '\n';
+</script>
+</body>
+</html>
