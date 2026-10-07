@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>5 заданий</title>
+</head>
+<body>
+<pre id="out"></pre>
+
+<script>
+const out = document.getElementById('out');
+const log = s => out.textContent += s + '\n';
+
+// 1.1. Составить программу, проверяющую, будут ли взаимно просты два натуральных (целых) числа.
+function gcd(a, b) {
+  while (b !== 0) [a, b] = [b, a % b];
+  return a;
+}
+function isCoprime(a, b) {
+  return gcd(a, b) === 1;
+}
+log('1.1: 14 и 25 взаимно просты? ' + isCoprime(14, 25));
+log('1.1: 12 и 18 взаимно просты? ' + isCoprime(12, 18));
+
+// 1.2. Составить программу, проверяющую, будет ли простым данное натуральное число.
+function isPrime(n) {
+  if (n < 2) return false;
+  for (let i = 2; i * i <= n; i++)
+    if (n % i === 0) return false;
+  return true;
+}
+log('1.2: 97 простое? ' + isPrime(97));
+log('1.2: 100 простое? ' + isPrime(100));
+
+// 1.5. Найти все делители натурального числа N.
+function divisors(n) {
+  const res = [];
+  for (let i = 1; i <= n; i++)
+    if (n % i === 0) res.push(i);
+  return res;
+}
+log('1.5: делители 36 -> ' + divisors(36).join(', '));
+
+//1.6. Разложить целое число на простые множители. Вывести на экран все простые множители (в порядке возрастания) и их порядки.
+function factorize(n) {
+  const res = [];
+  for (let p = 2; p * p <= n; p++) {
+    if (n % p === 0) {
+      let k = 0;
+      while (n % p === 0) { n /= p; k++; }
+      res.push([p, k]);
+    }
+  }
+  if (n > 1) res.push([n, 1]);
+  return res;
+}
+log('1.6: 360 = ' +
+  factorize(360).map(([p, k]) => `${p}^${k}`).join(' * '));
+
+//1.13. Написать программу сложения (вычитания) двух данных рациональных чисел. Ответ должен быть несократимой дробью.
+function addFrac(a, b, c, d) {          // a/b + c/d
+  let num = a * d + c * b;
+  let den = b * d;
+  const g = gcd(Math.abs(num), Math.abs(den));
+  return `${num / g}/${den / g}`;
+}
+log('1.13: 1/6 + 3/4 = ' + addFrac(1, 6, 3, 4));
+log('1.13: 5/7 - 2/7 = ' + addFrac(5, 7, -2, 7));
+</script>
+</body>
+</html>
