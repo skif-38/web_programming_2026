@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Календарь и таблица умножения</title>
+</head>
+<body>
+    <h3>Календарь на текущий месяц</h3>
+    <table border="1" id="cal"></table>
+
+    <h3>Таблица умножения</h3>
+    <table border="1" id="tab"></table>
+
+    <script>
+        var d = new Date();
+        var year = d.getFullYear();
+        var month = d.getMonth();
+        var today = d.getDate();
+        // чтобы понедельник был первым днём
+        var first = new Date(year, month, 1).getDay();
+        if (first == 0) first = 7;
+
+        // число дней в месяце
+        var days = new Date(year, month + 1, 0).getDate();
+        var html = "<tr><th>Пн</th><th>Вт</th><th>Ср</th><th>Чт</th><th>Пт</th><th>Сб</th><th>Вс</th></tr><tr>";
+
+        var cell = 0;
+        for (var i = 1; i < first; i++) {
+            html += "<td></td>";
+            cell++;
+        }
+        
+
+        for (var day = 1; day <= days; day++) {
+            if (day == today) {
+                html += "<td><b>" + day + "</b></td>";
+            } else {
+                html += "<td>" + day + "</td>";
+            }
+            cell++;
+            if (cell % 7 == 0) html += "</tr><tr>";
+        }
+        while (cell % 7 != 0) {
+            html += "<td></td>";
+            cell++;
+        }
+        html += "</tr>";
+
+        document.getElementById("cal").innerHTML = html;
+
+        
+
+
+
+        var html2 = "<tr><th>x</th>";
+        for (var j = 1; j <= 10; j++) {
+            html2 += "<th>" + j + "</th>";
+        }
+        html2 += "</tr>";
+
+        for (var i = 1; i <= 10; i++) {
+            html2 += "<tr><th>" + i + "</th>";
+            for (var j = 1; j <= 10; j++) {
+                html2 += "<td>" + (i * j) + "</td>";
+            }
+            html2 += "</tr>";
+        }
+
+        document.getElementById("tab").innerHTML = html2;
+    </script>
+</body>
+</html>
